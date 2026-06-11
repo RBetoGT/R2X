@@ -22,6 +22,29 @@ if TYPE_CHECKING:
     from r2x_core import PluginContext, System
 
 
+def _get_reeds_purchaser_source_types() -> tuple[type[Any], ...]:
+    """Return consuming-demand source model types available in the installed ReEDS package."""
+    from r2x_reeds import models as reeds_models
+
+    type_names = ("ReEDSElectrolyzerDemand", "ReEDSDataCenterDemand", "ReEDSConsumingTechnology")
+    resolved_types: list[type[Any]] = []
+    for type_name in type_names:
+        model_type = getattr(reeds_models, type_name, None)
+        if isinstance(model_type, type) and model_type not in resolved_types:
+            resolved_types.append(model_type)
+    return tuple(resolved_types)
+
+
+def _get_plexos_purchaser_type() -> type[Any]:
+    """Return purchaser model type, falling back to generator when purchaser is unavailable."""
+    from r2x_plexos import models as plexos_models
+
+    purchaser_type = getattr(plexos_models, "PLEXOSPurchaser", None)
+    if isinstance(purchaser_type, type):
+        return purchaser_type
+    return PLEXOSGenerator
+
+
 def attach_region_load_time_series(context: PluginContext) -> None:
     """Attach demand load and time series from ReEDSDemand to the translated PLEXOSRegion."""
     from r2x_plexos.models import PLEXOSRegion
@@ -112,7 +135,53 @@ def attach_time_series_to_generators(context: PluginContext) -> None:
                     target_gen, name=ts.name, time_series_type=type(ts)
                 ):
                     context.target_system.add_time_series(deepcopy(ts), target_gen)
+
+
+def attach_time_series_to_purchasers(context: PluginContext) -> None:
+    """Transfer electrolyzer and data center demand time series to translated PLEXOS purchasers."""
+    if context.source_system is None or context.target_system is None:
+        return
+
+    source_demands: dict[str, Any] = {}
+    for demand_type in _get_reeds_purchaser_source_types():
+        for demand in context.source_system.get_components(demand_type):
+            source_demands[demand.name] = demand
+    purchaser_type = _get_plexos_purchaser_type()
+    target_purchasers = {
+        purchaser.name: purchaser for purchaser in context.target_system.get_components(purchaser_type)
+    }
+
+    for demand_name, source_demand in source_demands.items():
+        target_purchaser = target_purchasers.get(demand_name)
+        if target_purchaser is None:
             continue
+
+        for metadata in context.source_system.time_series.list_time_series_metadata(source_demand):
+            ts_list = context.source_system.list_time_series(
+                source_demand, name=metadata.name, **metadata.features
+            )
+            if not ts_list:
+                logger.warning(
+                    "Missing purchaser demand time series {} for {}",
+                    metadata.name,
+                    source_demand.name,
+                )
+                continue
+
+            ts = deepcopy(ts_list[0])
+            ts_type = ts.__class__
+            if not context.target_system.has_time_series(
+                target_purchaser,
+                name=ts.name,
+                time_series_type=ts_type,
+                **metadata.features,
+            ):
+                context.target_system.add_time_series(ts, target_purchaser, **metadata.features)
+                logger.debug(
+                    "Attached purchaser time series {} to purchaser {}",
+                    ts.name,
+                    target_purchaser.name,
+                )
 
 
 def ensure_region_node_memberships(context: PluginContext) -> None:

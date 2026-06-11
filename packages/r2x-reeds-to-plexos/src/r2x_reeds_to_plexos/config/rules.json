@@ -116,7 +116,7 @@
   },
   {
     "defaults": {
-      "category": "electrolyzer",
+      "category": "consuming-tech",
       "fuel_price": 0.0,
       "heat_rate": 0.0,
       "vom_charge": 0.0,
@@ -147,9 +147,51 @@
       "mean_time_to_repair": "mean_time_to_repair_hours",
       "start_cost": "gen_startup_cost"
     },
+    "filter": {
+      "casefold": true,
+      "field": "technology",
+      "op": "not_in",
+      "values": ["electrolyzer", "data-center"]
+    },
     "source_type": "ReEDSConsumingTechnology",
     "target_type": "PLEXOSGenerator",
+    "version": 2
+  },
+  {
+    "defaults": {
+      "category": "electrolyzer",
+      "max_load": 0.0
+    },
+    "field_map": {
+      "category": "technology",
+      "name": "name",
+      "max_load": "capacity",
+      "ext": "ext"
+    },
+    "getters": {
+      "units": "get_component_units"
+    },
+    "source_type": "ReEDSElectrolyzerDemand",
+    "target_type": "PLEXOSPurchaser",
     "version": 1
+  },
+  {
+    "defaults": {
+      "category": "data-center",
+      "max_load": 0.0
+    },
+    "field_map": {
+      "category": "technology",
+      "name": "name",
+      "max_load": "capacity",
+      "ext": "ext"
+    },
+    "getters": {
+      "units": "get_component_units"
+    },
+    "source_type": "ReEDSDataCenterDemand",
+    "target_type": "PLEXOSPurchaser",
+    "version": 2
   },
   {
     "field_map": {
@@ -482,6 +524,18 @@
       "source_type": "PLEXOSBattery",
       "target_type": "PLEXOSMembership",
       "version": 4
+  },
+  {
+    "name": "purchaser_node_membership",
+    "system": "target",
+    "getters": {
+      "parent_object": "reeds_membership_parent_component",
+      "child_object": "reeds_membership_component_child_node",
+      "collection": "reeds_membership_collection_nodes"
+    },
+    "source_type": "PLEXOSPurchaser",
+    "target_type": "PLEXOSMembership",
+    "version": 5
   },
   {
     "name": "line_from_node_membership",

@@ -80,22 +80,26 @@ def _lookup_target_node(context: PluginContext, region_name: str) -> Result[Any,
     return Err(ValueError(f"No PLEXOSNode found for region '{region_name}'"))
 
 
-def _lookup_source_generator(context: PluginContext, name: str) -> Any | None:
-    """Find a ReEDS generator-like component by name."""
-    from r2x_reeds.models import ReEDSConsumingTechnology, ReEDSGenerator, ReEDSStorage
+def _lookup_source_membership_component(context: PluginContext, name: str) -> Any | None:
+    """Find a ReEDS source component used for membership node resolution by name."""
+    from r2x_reeds import models as reeds_models
+
+    reeds_consuming_technology = reeds_models.ReEDSConsumingTechnology
+    reeds_generator = reeds_models.ReEDSGenerator
+    reeds_storage = reeds_models.ReEDSStorage
 
     if context.source_system is None:
         return None
 
-    for gen in context.source_system.get_components(ReEDSGenerator):
+    for gen in context.source_system.get_components(reeds_generator):
         if gen.name == name:
             return gen
 
-    for consuming_tech in context.source_system.get_components(ReEDSConsumingTechnology):
+    for consuming_tech in context.source_system.get_components(reeds_consuming_technology):
         if consuming_tech.name == name:
             return consuming_tech
 
-    for storage in context.source_system.get_components(ReEDSStorage):
+    for storage in context.source_system.get_components(reeds_storage):
         if storage.name == name:
             return storage
 
@@ -904,13 +908,13 @@ def reeds_membership_component_child_node(
 ) -> Result[PLEXOSNode, ValueError]:
     """Resolve a component's region to the translated node."""
     comp_name = getattr(component, "name", "")
-    source_gen = _lookup_source_generator(context, comp_name)
-    if source_gen is None:
-        return Err(ValueError(f"No source generator found for '{comp_name}'"))
+    source_component = _lookup_source_membership_component(context, comp_name)
+    if source_component is None:
+        return Err(ValueError(f"No source component found for '{comp_name}'"))
 
-    region = getattr(source_gen, "region", None)
+    region = getattr(source_component, "region", None)
     if region is None or not getattr(region, "name", None):
-        return Err(ValueError(f"Source generator '{source_gen.name}' is missing region data"))
+        return Err(ValueError(f"Source component '{source_component.name}' is missing region data"))
 
     return _lookup_target_node(context, region.name)
 

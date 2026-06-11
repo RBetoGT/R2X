@@ -515,7 +515,6 @@ def test_get_head_tail_storage_names_valid(context, monkeypatch):
         inflow=50.0,
         outflow=30.0,
         level_targets=0.8,
-        travel_time=2.0,
         intake_elevation=500.0,
         head_to_volume_factor=LinearCurve(1.0),
         reservoir_location=ReservoirLocation.HEAD,
@@ -1068,7 +1067,6 @@ def test_get_head_tail_storage_uuid(context):
         inflow=50.0,
         outflow=30.0,
         level_targets=0.8,
-        travel_time=2.0,
         intake_elevation=500.0,
         head_to_volume_factor=LinearCurve(1.0),
         reservoir_location=ReservoirLocation.HEAD,
@@ -1101,7 +1099,6 @@ def test_get_head_tail_storage_name(context, monkeypatch):
         inflow=50.0,
         outflow=30.0,
         level_targets=0.8,
-        travel_time=2.0,
         intake_elevation=500.0,
         head_to_volume_factor=LinearCurve(1.0),
         reservoir_location=ReservoirLocation.HEAD,
@@ -1123,7 +1120,6 @@ def test_get_head_tail_storage_name_without_pumped_storage_association(context):
         inflow=50.0,
         outflow=30.0,
         level_targets=0.8,
-        travel_time=2.0,
         intake_elevation=500.0,
         head_to_volume_factor=LinearCurve(1.0),
         reservoir_location=ReservoirLocation.HEAD,
@@ -1630,7 +1626,6 @@ def test_get_storage_max_volume_natural_inflow_none(context):
         inflow=0.0,
         outflow=0.0,
         level_targets=0.8,
-        travel_time=2.0,
         intake_elevation=500.0,
         head_to_volume_factor=LinearCurve(1.0),
         operation_cost=HydroReservoirCost.example(),
@@ -1891,7 +1886,6 @@ def test_get_head_storage_uuid(context):
         inflow=0.0,
         outflow=0.0,
         level_targets=1000.0,
-        travel_time=0.0,
         level_data_type="USABLE_VOLUME",
         intake_elevation=0.0,
         operation_cost=HydroReservoirCost.example(),
@@ -1909,7 +1903,6 @@ def test_get_tail_storage_uuid(context):
         inflow=0.0,
         outflow=0.0,
         level_targets=1000.0,
-        travel_time=0.0,
         level_data_type="USABLE_VOLUME",
         intake_elevation=0.0,
         operation_cost=HydroReservoirCost.example(),
@@ -1955,7 +1948,6 @@ def test_get_head_storage_name(context, monkeypatch):
         inflow=0.0,
         outflow=0.0,
         level_targets=1000.0,
-        travel_time=0.0,
         level_data_type="USABLE_VOLUME",
         intake_elevation=0.0,
         operation_cost=HydroReservoirCost.example(),
@@ -1979,7 +1971,6 @@ def test_get_tail_storage_name(context, monkeypatch):
         inflow=0.0,
         outflow=0.0,
         level_targets=1000.0,
-        travel_time=0.0,
         level_data_type="USABLE_VOLUME",
         intake_elevation=0.0,
         operation_cost=HydroReservoirCost.example(),
@@ -2003,7 +1994,6 @@ def test_head_tail_storage_name_infers_location_from_suffix_when_missing(context
         inflow=0.0,
         outflow=0.0,
         level_targets=1000.0,
-        travel_time=0.0,
         level_data_type="USABLE_VOLUME",
         intake_elevation=0.0,
         operation_cost=HydroReservoirCost.example(),
@@ -2019,7 +2009,6 @@ def test_head_tail_storage_name_infers_location_from_suffix_when_missing(context
         inflow=0.0,
         outflow=0.0,
         level_targets=1000.0,
-        travel_time=0.0,
         level_data_type="USABLE_VOLUME",
         intake_elevation=0.0,
         operation_cost=HydroReservoirCost.example(),
@@ -2050,7 +2039,6 @@ def test_head_tail_storage_name_suffix_overrides_conflicting_metadata(context, m
         inflow=0.0,
         outflow=0.0,
         level_targets=1000.0,
-        travel_time=0.0,
         level_data_type="USABLE_VOLUME",
         intake_elevation=0.0,
         operation_cost=HydroReservoirCost.example(),
@@ -2078,7 +2066,6 @@ def test_unsuffixed_reservoir_skips_side_with_explicit_reservoir(context, monkey
         inflow=0.0,
         outflow=0.0,
         level_targets=1000.0,
-        travel_time=0.0,
         level_data_type="USABLE_VOLUME",
         intake_elevation=0.0,
         operation_cost=HydroReservoirCost.example(),
@@ -2094,7 +2081,6 @@ def test_unsuffixed_reservoir_skips_side_with_explicit_reservoir(context, monkey
         inflow=0.0,
         outflow=0.0,
         level_targets=1000.0,
-        travel_time=0.0,
         level_data_type="USABLE_VOLUME",
         intake_elevation=0.0,
         operation_cost=HydroReservoirCost.example(),
@@ -2844,6 +2830,7 @@ def test_get_heat_rate_multiband_returns_property(context_with_thermal_generator
 
 
 def test_heat_rate_getters_return_absolute_values(monkeypatch, context_with_thermal_generators):
+    import r2x_sienna_to_plexos.getters as live_getters
     from r2x_sienna.models import ThermalStandard
     from r2x_sienna_to_plexos.getters import (
         get_heat_rate,
@@ -2855,7 +2842,7 @@ def test_heat_rate_getters_return_absolute_values(monkeypatch, context_with_ther
 
     source = context_with_thermal_generators.source_system.get_component(ThermalStandard, "thermal-fuel")
     monkeypatch.setattr(
-        getters,
+        live_getters,
         "compute_heat_rate_data",
         lambda _component: {
             "heat_rate_base": -120.0,

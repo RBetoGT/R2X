@@ -1189,7 +1189,7 @@ docs = [
 
 [package.metadata]
 requires-dist = [
-    { name = "r2x-core", git = "https://github.com/NatLabRockies/r2x-core.git?branch=main" },
+    { name = "r2x-core" },
     { name = "r2x-plexos-to-sienna", editable = "packages/r2x-plexos-to-sienna" },
     { name = "r2x-reeds-to-plexos", editable = "packages/r2x-reeds-to-plexos" },
     { name = "r2x-reeds-to-sienna", editable = "packages/r2x-reeds-to-sienna" },
@@ -1204,7 +1204,7 @@ dev = [
     { name = "prek", specifier = ">=0.3.8" },
     { name = "pytest", specifier = ">=8.3.0,<9.0.0" },
     { name = "pytest-cov", specifier = ">=5.0.0,<8.0.0" },
-    { name = "r2x-core", git = "https://github.com/NatLabRockies/r2x-core.git?branch=main" },
+    { name = "r2x-core", specifier = ">=0.4.2" },
     { name = "ruff", specifier = ">=0.6.8,<0.7.0" },
     { name = "taplo", specifier = ">=0.9.3,<1.0.0" },
     { name = "ty", specifier = ">=0.0.2" },
@@ -1220,7 +1220,7 @@ docs = [
 [[package]]
 name = "r2x-core"
 version = "0.5.0"
-source = { git = "https://github.com/NatLabRockies/r2x-core.git?branch=main#69e5ae0d5ce778ce8bb4751b8afa751b73e4061a" }
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "h5py" },
     { name = "infrasys" },
@@ -1230,18 +1230,18 @@ dependencies = [
     { name = "pydantic" },
     { name = "rust-ok" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/9b/fc/1607777bc5db4d6141a476635c3430066aaa825344b61b98683fcbf9a253/r2x_core-0.5.0.tar.gz", hash = "sha256:f1ec94866e7f67ba0e66d1b81e26d18e5d2c8da2a44a7fd07ea37d8380d7a582", size = 64779, upload-time = "2026-05-21T01:33:48.005Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c3/22/10be82e57b0a0ee3d3633f73b38d87333cff69f005db877d6b4cc2373471/r2x_core-0.5.0-py3-none-any.whl", hash = "sha256:ccda0430ef21f62bec807988dcd11eabe16bc797c8b437c919f07f40ac685427", size = 80251, upload-time = "2026-05-21T01:33:46.726Z" },
+]
 
 [[package]]
 name = "r2x-plexos"
 version = "0.1.5"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/NatLabRockies/r2x-plexos.git?branch=main#3eab1dcac120bc6e8866d4bff55aaa924f19108d" }
 dependencies = [
     { name = "plexosdb" },
     { name = "r2x-core" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/7d/85/ee6e1ddd2c93f4e442cbeee1e0bd974eed5711d542eea6b7ca27125aeec3/r2x_plexos-0.1.5.tar.gz", hash = "sha256:86acac56bd97fecfa72c06b6fa3d175aa59f452aacbbbb3a3bfa837de48c78dd", size = 815141, upload-time = "2026-04-07T04:22:09.834Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/5c/c9/93786e8c786601dbdc7ff9a69e7ab0f2db19bdb9205443da68616478407d/r2x_plexos-0.1.5-py3-none-any.whl", hash = "sha256:890eb8ee13e1b79fb276c7696ad78a495acfd7d0965aa10bc60c5ddd196476e0", size = 831933, upload-time = "2026-04-07T04:22:08.381Z" },
 ]
 
 [[package]]
@@ -1255,7 +1255,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "r2x-plexos", specifier = ">=0.1.4,<1.0.0" },
+    { name = "r2x-plexos", git = "https://github.com/NatLabRockies/r2x-plexos.git?branch=main" },
     { name = "r2x-sienna", git = "https://github.com/NatLabRockies/r2x-sienna.git?branch=main" },
 ]
 
@@ -1278,7 +1278,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "r2x-plexos", specifier = ">=0.1.4,<1.0.0" },
+    { name = "r2x-plexos", git = "https://github.com/NatLabRockies/r2x-plexos.git?branch=main" },
     { name = "r2x-reeds", git = "https://github.com/NatLabRockies/r2x-reeds.git?branch=main" },
 ]
 
@@ -1300,7 +1300,7 @@ requires-dist = [
 [[package]]
 name = "r2x-sienna"
 version = "0.3.0"
-source = { git = "https://github.com/NatLabRockies/r2x-sienna.git?branch=main#c39397d0c2ae0a7079526ee6cf03a5261bc18da1" }
+source = { git = "https://github.com/NatLabRockies/r2x-sienna.git?branch=main#4f33080dd7a39dac2d94edf14ff04a21c09a0cba" }
 dependencies = [
     { name = "r2x-core" },
 ]
@@ -1316,7 +1316,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "r2x-plexos", specifier = ">=0.1.4,<1.0.0" },
+    { name = "r2x-plexos", git = "https://github.com/NatLabRockies/r2x-plexos.git?branch=main" },
     { name = "r2x-sienna", git = "https://github.com/NatLabRockies/r2x-sienna.git?branch=main" },
 ]
 
