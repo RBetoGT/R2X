@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.2.0](https://github.com/RBetoGT/R2X/compare/r2x-reeds-to-sienna-v0.1.0...r2x-reeds-to-sienna-v0.2.0) (2026-06-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* Replace monolithic parser/exporter with plugin architecture.    - Introduce R2X Plugin Management System with discoverable plugin configs    - Restructure into four independent packages under packages/: r2x-reeds-to-sienna,  r2x-reeds-to-plexos, r2x-sienna-to-plexos, r2x-plexos-to-sienna    - Extract parsing/exporting into separate model plugins, translations are now pure  mapping logic    - Overhaul CI/CD with per-package release-please, dependabot, auto-labeler, and commit  linting    - Add taplo (TOML linting), ty (type checking), and updated pre-commit hooks    - Expand test coverage across all translation packages (getters, rules, utilities)    - Fix min stable level zeroing, duplicated arcs, time series store, and template  injection bugs    - Fix smoke test to build all workspace packages locally for dependency resolution    - Rewrite documentation to match new framework style and update README
+
+### Features
+
+* add new types of loads for reeds to plexos translations ([#256](https://github.com/RBetoGT/R2X/issues/256)) ([cba09db](https://github.com/RBetoGT/R2X/commit/cba09db148e7c2b6211d8f0e13840ab7d84d2a7c))
+* v2.0.0 ([#187](https://github.com/RBetoGT/R2X/issues/187)) ([161bcc9](https://github.com/RBetoGT/R2X/commit/161bcc92a0baea9b6c70afde8be9f188931fc7eb))
+
+
+### Bug Fixes
+
+* resolve reeds translation issues and update to latest code base ([#266](https://github.com/RBetoGT/R2X/issues/266)) ([28addb2](https://github.com/RBetoGT/R2X/commit/28addb2aec553303a0bb62f3872f2af01c00c387))
+
 ## 0.1.0 (2026-04-08)
 
 
